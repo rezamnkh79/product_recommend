@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }}</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 3.2em;
+            padding: 40px 0;
+            background-color: #111; /* Darker background for the header */
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.4);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212; /* Dark background for consistency */
+            color: #e0e0e0; /* Lighter text for contrast */
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Product Detail */
+        .product-detail {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .product-info {
+            max-width: 600px;
+        }
+
+        .product-name {
+            font-size: 2.5em;
+            color: #fff;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .product-description {
+            color: #bbb;
+            margin: 20px 0;
+            font-size: 1.1em;
+            line-height: 1.5;
+        }
+
+        .product-price {
+            font-size: 1.8em;
+            color: #ff4d4d; /* Red price color */
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .product-images img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .product-images img:hover {
+            transform: scale(1.05);
+        }
+
+         .cart-btn {
+            padding: 12px 30px;
+            background-color: #535050;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            display: inline-block;
+            text-align: center;
+            margin-top: 30px;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .back-btn {
+            padding: 12px 30px;
+            background-color: #ff4d4d;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            display: inline-block;
+            text-align: center;
+            margin-top: 30px;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background-color: #e60000; /* Darker red on hover */
+            transform: scale(1.05); /* Slight zoom effect */
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .product-detail {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .product-info {
+                text-align: center;
+                margin-bottom: 30px;
+            }
+
+            .product-name {
+                font-size: 2.2em;
+            }
+
+            .product-price {
+                font-size: 1.6em;
+            }
+
+            .product-description {
+                font-size: 1em;
+            }
+
+            .product-images img {
+                width: 80%;
+                max-width: 500px;
+            }
+        }
+    </style>
+</head>
+<body>
+{% include 'base.html' %}
+<h1>{{ product.name }}</h1>
+<div class="container">
+    <div class="product-detail">
+        <div class="product-info">
+            <h1 class="product-name">{{ product.name }}</h1>
+            <p class="product-description">{{ product.description }}</p>
+            <p class="product-price">Price: ${{ product.price }}</p>
+            <!-- If the product has images, you can display them here -->
+            {% if product.images.all %}
+                <div class="product-images">
+                    {% for image in product.images.all %}
+                        <img src="{{ image.url }}" alt="{{ product.name }}" width="300">
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <button class="cart-btn" onclick="addToCart({{ product.product_info.id }})">Add to Cart</button>
+            <button class="back-btn" onclick="window.location.href='/products/'">Back to Products</button>
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+    function getDeviceType() {
+        if (/Mobi|Android/i.test(navigator.userAgent)) {
+            return 'mobile';
+        } else {
+            return 'desktop';
+        }
+    }
+
+    function getCSRFToken() {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, 10) === ('csrftoken=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(10));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function addToCart(productId) {
+        fetch('/buying/cart/add/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken(),
+            },
+            body: JSON.stringify({
+                'product_id': productId,
+                'quantity': 1
+            }),
+            credentials: 'same-origin'
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert('Added to cart successfully');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
+</html>

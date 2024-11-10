@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop</title>
+    <style>
+    /* Basic Reset */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    /* Body Styling */
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #121212; /* Dark background */
+        color: #e0e0e0; /* Lighter text for better readability */
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+    }
+
+    h1, h2 {
+        color: #201e1e;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    h1 {
+        font-size: 3.2em;
+        padding: 40px 0;
+        background-color: #111; /* Darker background for the header */
+        box-shadow: 0 3px 15px rgba(0, 0, 0, 0.4);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    h2 {
+        font-size: 2.4em;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+    }
+
+    /* Container */
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 30px;
+    }
+
+    /* Grid for Products */
+    .products-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+        gap: 30px;
+        margin-bottom: 50px;
+    }
+
+    .product {
+        background-color: #1a1a1a;
+        border-radius: 10px;
+        box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+        text-align: center;
+        padding: 10px;
+    }
+
+    .product:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        border: 1px solid #ff4d4d; /* Add border on hover */
+    }
+
+    .product img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        border-radius: 8px;
+        transition: transform 0.3s ease;
+    }
+
+    .product:hover img {
+        transform: scale(1.05);
+    }
+
+    .product-info {
+        padding: 15px;
+    }
+
+    .product-name {
+        font-size: 1.7em;
+        color: #fff;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .product-description {
+        color: #bbb;
+        font-size: 1.1em;
+        margin-bottom: 15px;
+    }
+
+    .product-price {
+        font-size: 1.4em;
+        color: #ff4d4d; /* Red price color */
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .product button {
+        width: 100%;
+        padding: 14px 0;
+        margin-top: 15px;
+        border: none;
+        border-radius: 6px;
+        font-size: 1.1em;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        color: #af1b1b;
+    }
+
+    .product button:first-child {
+        background-color: #ff4d4d; /* Red for "Add to Cart" */
+    }
+
+    .product button:first-child:hover {
+        background-color: #e60000; /* Darker red on hover */
+        transform: scale(1.05);
+    }
+
+    .product button:last-child {
+        background-color: #333;
+        border: 2px solid #ff4d4d; /* Red border for "View Details" */
+        color: #ff4d4d;
+    }
+
+    .product button:last-child:hover {
+        background-color: #555;
+        color: #fff;
+        transform: scale(1.05);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+        .products-list {
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        }
+    }
+
+    @media (max-width: 768px) {
+        .product-name {
+            font-size: 1.5em;
+        }
+
+        .product-description {
+            font-size: 1em;
+        }
+
+        .product-price {
+            font-size: 1.3em;
+        }
+    }
+
+    /* Empty state for products */
+    .no-products {
+        text-align: center;
+        color: #888;
+        font-size: 1.6em;
+        margin-top: 50px;
+    }
+
+    /* Back Button */
+    .back-btn {
+        padding: 12px 25px;
+        background-color: #ff4d4d;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.2em;
+        cursor: pointer;
+        display: inline-block;
+        text-align: center;
+        margin-top: 30px;
+        text-decoration: none;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .back-btn:hover {
+        background-color: #e60000;
+        transform: scale(1.05);
+    }
+    .product button:first-child {
+        width: 100%;
+        padding: 14px 0;
+        margin-top: 15px;
+        border: none;
+        border-radius: 6px;
+        font-size: 1.1em;
+        cursor: pointer;
+        color: #fff;  /* White text for contrast */
+        background: linear-gradient(145deg, #ff6f61, #ff4d4d); /* Gradient background */
+        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    }
+
+    /* Button Hover Effect */
+    .product button:first-child:hover {
+        background: linear-gradient(145deg, #e60000, #ff2a2a); /* Darker gradient for hover */
+        transform: scale(1.05);  /* Slight zoom effect */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Subtle shadow on hover */
+    }
+
+    /* Active State (when clicked) */
+    .product button:first-child:active {
+        background: linear-gradient(145deg, #cc3d3d, #ff4d4d); /* Darker active state */
+        transform: scale(0.98); /* Slight shrink effect */
+    }
+
+    /* Optional: Focus effect for accessibility */
+    .product button:first-child:focus {
+        outline: 2px solid #ff4d4d; /* Focus outline for accessibility */
+        outline-offset: 4px;
+    }
+
+</style>
+
+</head>
+<body>
+{% include 'base.html' %}
+<h1>Our Products</h1>
+<h2>Recommended for You</h2>
+<div id="recommended-products">
+    {% if recommended_products %}
+        <div class="products-list">
+            {% for product in recommended_products %}
+                <div class="product">
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.description }}</p>
+                    <p class="price">Price: ${{ product.price }}</p>
+                    <button onclick="addToCart({{ product.id }})">Add to Cart</button>
+                    <button onclick="viewProductDetails({{ product.id }})">View Details</button>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No recommendations available at the moment.</p>
+    {% endif %}
+</div>
+
+<h2>All Products</h2>
+<div id="products" class="products-list">
+    {% for product in products %}
+        <div class="product">
+            <img src="{{ product.image_url }}" alt="{{ product.name }}">
+            <div class="product">
+                <h3 class="product-name">{{ product.name }}</h3>
+                <p class="product-description">{{ product.description }}</p>
+                <p class="product-price">${{ product.price }}</p>
+                <button onclick="addToCart({{ product.id }})">Add to Cart</button>
+                <button onclick="viewProductDetails({{ product.id }})">View Details</button>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<script>
+    function getDeviceType() {
+        if (/Mobi|Android/i.test(navigator.userAgent)) {
+            return 'mobile';
+        } else {
+            return 'desktop';  
+        }
+    }
+
+    function viewProductDetails(productId) {
+        let deviceType = getDeviceType();
+        let url = `/products/${productId}?device_type=${deviceType}`;
+        window.location.href = url;
+    }
+
+    function getCSRFToken() {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, 10) === ('csrftoken=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(10));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function addToCart(productId) {
+        fetch('/buying/cart/add/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken(),
+            },
+            body: JSON.stringify({
+                'product_id': productId,
+                'quantity': 1
+            }),
+            credentials: 'same-origin'
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert('Added to cart successfully');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
+
+</body>
+</html>

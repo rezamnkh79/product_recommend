@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            padding: 20px 0;
+            background-color: #333;
+            color: white;
+        }
+
+        #cart-items {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        li:last-child {
+            border-bottom: none;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .empty-cart {
+            text-align: center;
+            font-size: 18px;
+            color: #555;
+        }
+
+        p {
+            font-size: 18px;
+            text-align: right;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+{% include 'base.html' %}
+<h1>Your Cart</h1>
+<div id="cart-items">
+    {% if cart_items %}
+        <ul>
+            {% for item in cart_items %}
+                <li>
+                    <span>{{ item.product.name }} (x{{ item.quantity }})</span>
+                    <span>${{ item.total_price }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+        <p>Total Price: ${{ total_price }}</p>
+        <button onclick="checkout()">Checkout</button>
+    {% else %}
+        <p class="empty-cart">Your cart is empty!</p>
+    {% endif %}
+</div>
+
+<script>
+    function checkout() {
+        fetch('/buying/cart/checkout/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken(),
+                
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                window.location.href = '/products/'; 
+            });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!-- cart_history.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart History</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .cart-history-item {
+            border-bottom: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        .cart-history-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-history-item h3 {
+            color: #2c3e50;
+        }
+
+        .cart-history-item p {
+            color: #7f8c8d;
+        }
+
+        .cart-history-item span {
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #7f8c8d;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Your Cart History</h1>
+
+        {% if history %}
+            <div class="cart-history-list">
+                {% for item in history %}
+                    <div class="cart-history-item">
+                        <h3>Added on: {{ item.created_at|date:"F d, Y, H:i" }}</h3>
+                        <p>{{ item.total_price }}</p>
+                        <p>Quantity: <span>{{ item.status }}</span></p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="empty-message">You have not added any products to your cart yet.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
